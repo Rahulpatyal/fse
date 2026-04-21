@@ -9,6 +9,9 @@ jobs:
     steps:
       - name: setup node
         uses: actions/setup-node@v4
+        
+      - name: check node version
+        run: node -v
 
       - name: list file
         run: ls
@@ -20,6 +23,9 @@ jobs:
     steps:
       - name: setup code
         uses: actions/setup-node@v4
+
+      - name: check node version
+        run: node -v
 
       - name: list file
         run: ls
