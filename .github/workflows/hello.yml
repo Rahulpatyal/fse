@@ -1,78 +1,28 @@
-name: Clone repository workflow
-
+name: artifacts
 on: push
 
 jobs:
-
-  lint:
+  job1:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: Create file
+        run: echo "Hello World" > file.txt
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
         with:
-          node-version: 18
+          name: my-file
+          path: file.txt
 
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run lint
-        run: npm run lint
-
-
-  build:
+  job2:
     runs-on: ubuntu-latest
-    needs: lint
+    needs: job1  
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - name: Download a file
+        uses: actions/download-artifact@v4
         with:
-          node-version: 18
+          name: my-file
 
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build project
-        run: npm run build
-
-
-  test:
-    runs-on: ubuntu-latest
-    needs: build
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run tests
-        run: npm run test
-
-
-  deploy-app:
-    needs: test
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Start server
-        run: echo "Deployment successful"
+      - name: Read file   
+        run: cat file.txt
